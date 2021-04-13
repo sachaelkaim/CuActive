@@ -1,39 +1,48 @@
 package com.soen357.cuactive;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.widget.Button;
+import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-import com.soen357.cuactive.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
-        FloatingActionButton fab = findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        Button topButton = (Button) findViewById(R.id.topButton);
+        Button midButton = (Button) findViewById(R.id.midButton);
+        Button botButton = (Button) findViewById(R.id.botButton);
+        TextView points = (TextView) findViewById(R.id.points);
+
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String mString = mPrefs.getString("points", "0");
+        points.setText("Pts : " + mString);
+
+        topButton.setOnClickListener(v -> points.setText(updatePoints( 1, mPrefs)));
+
+        midButton.setOnClickListener(v -> points.setText(updatePoints( 2, mPrefs)));
+
+        botButton.setOnClickListener(v -> points.setText(updatePoints( 3, mPrefs)));
+
+    }
+
+    private String updatePoints(int value, SharedPreferences mPrefs)
+    {
+        String mString = mPrefs.getString("points", "0");
+        int currentPoints = Integer.parseInt(mString);
+        int newValue = currentPoints + value;
+
+        SharedPreferences.Editor mEditor = mPrefs.edit();
+        mEditor.putString("points", String.valueOf(newValue)).apply();
+
+        return "Pts : " + newValue;
     }
 }

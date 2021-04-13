@@ -2,4 +2,10 @@
     <string name="app_name">CuActive</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="points">Pts : 9999</string>
+    <string name="cuactive">CuActive</string>
+    <string name="topButtonText">Exercise</string>
+    <string name="midButtonText">Chores</string>
+    <string name="botButtonText">Cooking</string>
+    <string name="welcomeText">Welcome</string>
 </resources>
