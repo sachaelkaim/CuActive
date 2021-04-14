@@ -1,6 +1,7 @@
 package com.soen357.cuactive;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,32 +18,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button topButton = (Button) findViewById(R.id.topButton);
-        Button midButton = (Button) findViewById(R.id.midButton);
-        Button botButton = (Button) findViewById(R.id.botButton);
-        TextView points = (TextView) findViewById(R.id.points);
+        Button topButton = findViewById(R.id.topButton);
+        Button midButton = findViewById(R.id.midButton);
+        Button botButton = findViewById(R.id.botButton);
+        TextView points = findViewById(R.id.points);
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String mString = mPrefs.getString("points", "0");
         points.setText("Pts : " + mString);
 
-        topButton.setOnClickListener(v -> points.setText(updatePoints( 1, mPrefs)));
+        topButton.setOnClickListener(v -> moveToActivityScreen( "Exercise", mPrefs));
 
-        midButton.setOnClickListener(v -> points.setText(updatePoints( 2, mPrefs)));
+        midButton.setOnClickListener(v -> moveToActivityScreen( "Chores", mPrefs));
 
-        botButton.setOnClickListener(v -> points.setText(updatePoints( 3, mPrefs)));
+        botButton.setOnClickListener(v -> moveToActivityScreen( "Cooking", mPrefs));
 
     }
 
-    private String updatePoints(int value, SharedPreferences mPrefs)
+    private void moveToActivityScreen(String activity, SharedPreferences mPrefs)
     {
-        String mString = mPrefs.getString("points", "0");
-        int currentPoints = Integer.parseInt(mString);
-        int newValue = currentPoints + value;
-
         SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.putString("points", String.valueOf(newValue)).apply();
+        mEditor.putString("activity", activity).apply();
 
-        return "Pts : " + newValue;
+        Intent intent = new Intent(this, ActivityScreen.class);
+        startActivity(intent);
     }
 }
