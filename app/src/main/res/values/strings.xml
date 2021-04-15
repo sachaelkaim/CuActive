@@ -20,4 +20,12 @@
     <string name="controlButton">start</string>
     <string name="back">Back</string>
     <string name="chosen_activity">Chosen Activity</string>
+    <string name="use_5_points">Use 5 Points</string>
+    <string name="use_10_points">Use 10 Points</string>
+    <string name="use_20_points">Use 20 Points</string>
+    <string name="use_40_points">Use 40 Points</string>
+    <string name="use_50_points">Use 50 Points</string>
+    <string name="use_100_points">Use 100 Points</string>
+    <string name="shop">Shop</string>
+    <string name="title_activity_point_shop">PointShop</string>
 </resources>
