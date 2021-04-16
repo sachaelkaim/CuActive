@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Date;
+import java.util.Objects;
 
 public class ActivityScreen extends AppCompatActivity {
 
@@ -37,6 +38,9 @@ public class ActivityScreen extends AppCompatActivity {
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String mString = mPrefs.getString("activity", "None Chosen");
         activitySelection.setText(mString);
+
+        SharedPreferences.Editor mEditor = mPrefs.edit();
+        mEditor.putBoolean("startedExercise", true).apply();
 
         startButton.setText("Start " + mString);
 
@@ -64,6 +68,10 @@ public class ActivityScreen extends AppCompatActivity {
         }
         else
         {
+            if (start == null)
+            {
+                start = new Date();
+            }
             Date end = new Date();
             long timeSpent = end.getTime() - start.getTime();
             int minutes = (int) Math.floor(timeSpent / 60000.0f);
