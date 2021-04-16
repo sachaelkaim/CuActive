@@ -14,8 +14,15 @@ import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.Date;
+
 public class ActivityScreen extends AppCompatActivity {
 
+    Date start;
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +38,8 @@ public class ActivityScreen extends AppCompatActivity {
         String mString = mPrefs.getString("activity", "None Chosen");
         activitySelection.setText(mString);
 
+        startButton.setText("Start " + mString);
+
         backButton.setOnClickListener(v -> moveToMainScreen());
 
         startButton.setOnClickListener(v -> startExercise(mPrefs));
@@ -45,7 +54,9 @@ public class ActivityScreen extends AppCompatActivity {
         Button startButton = findViewById(R.id.startButton);
         if (started)
         {
-            startButton.setText("End Exercise");
+            start = new Date();
+            String mString = mPrefs.getString("activity", "None Chosen");
+            startButton.setText("End " + mString);
             startButton.setBackgroundColor(Color.RED);
 
             SharedPreferences.Editor mEditor = mPrefs.edit();
@@ -53,11 +64,19 @@ public class ActivityScreen extends AppCompatActivity {
         }
         else
         {
+            Date end = new Date();
+            long timeSpent = end.getTime() - start.getTime();
+            int minutes = (int) Math.floor(timeSpent / 60000.0f);
+
+            int minutesDone = mPrefs.getInt("minutesSpent", 0);
+            SharedPreferences.Editor mEditor = mPrefs.edit();
+            mEditor.putInt("minutesSpent", minutes + minutesDone).apply();
+
             int pointsEarned = (int) Math.floor(Math.random() * (100 - 20 + 1) + 20);
             updatePoints(pointsEarned, mPrefs);
 
             AlertDialog alertDialog = new AlertDialog.Builder(ActivityScreen.this).create();
-            alertDialog.setMessage("You have earned " + pointsEarned + " points");
+            alertDialog.setMessage("You have earned " + pointsEarned + " points. \n" + "You have spent " + minutes + " minutes on this activity!");
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     moveToMainScreen();
@@ -65,7 +84,6 @@ public class ActivityScreen extends AppCompatActivity {
             });
             alertDialog.show();
 
-            SharedPreferences.Editor mEditor = mPrefs.edit();
             mEditor.putBoolean("startedExercise", true).apply();
         }
 

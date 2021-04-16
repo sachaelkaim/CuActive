@@ -9,6 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CuActive">
+
+        <receiver
+            android:name=".ExerciseReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote" />
         <receiver
             android:name=".NotificationReceiver"
             android:enabled="true"
